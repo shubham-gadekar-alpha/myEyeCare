@@ -1,0 +1,2 @@
+1. Cancel reminder is not working.
+2. Both reminders' notification is triggering at the same time.
