@@ -7,17 +7,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.alpha.myeyecare.model.AppDestinations
+import com.alpha.myeyecare.model.ReminderTypes.DRINKING_REMINDER
 import com.alpha.myeyecare.model.ReminderTypes.EYE_REMINDER
-import com.alpha.myeyecare.ui.screens.EyeCareScreen
 import com.alpha.myeyecare.ui.screens.HomeScreen
+import com.alpha.myeyecare.ui.screens.ReminderDetails
 import com.alpha.myeyecare.ui.screens.SetupReminderScreen
-import com.alpha.myeyecare.ui.screens.WaterReminderScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,25 +46,31 @@ fun AppNavigation() {
         }
 
         composable(
-            AppDestinations.EYE_CARE_SCREEN
+            AppDestinations.EYE_CARE_REMINDER_SCREEN
         ) {
-            EyeCareScreen(navController = navController)
+            SetupReminderScreen(
+                reminderType = EYE_REMINDER,
+                initialDetails = ReminderDetails(title = "My Eye Care Break"),
+                onSaveReminder = {
+                    navController.popBackStack()
+                },
+                onBackIconPressed = {
+                    navController.popBackStack()
+                }
+            )
         }
 
         composable(AppDestinations.WATER_REMINDER_SCREEN) {
-            WaterReminderScreen(navController = navController)
-        }
-
-        composable(
-            AppDestinations.SET_REMINDER_SCREEN,
-            arguments = listOf(
-                navArgument("reminderType") {
-                    type = NavType.StringType
-                    defaultValue = EYE_REMINDER
+            SetupReminderScreen(
+                reminderType = DRINKING_REMINDER,
+                initialDetails = ReminderDetails(title = "Drink Water Break"),
+                onSaveReminder = {
+                    navController.popBackStack()
+                },
+                onBackIconPressed = {
+                    navController.popBackStack()
                 }
-            )) {
-            val reminderType = it.arguments?.getString("reminderType").toString()
-            SetupReminderScreen(reminderType = reminderType)
+            )
         }
     }
 }

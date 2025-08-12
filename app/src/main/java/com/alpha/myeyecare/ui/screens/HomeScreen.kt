@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.alpha.myeyecare.model.AppDestinations.EYE_CARE_SCREEN
+import com.alpha.myeyecare.model.AppDestinations.EYE_CARE_REMINDER_SCREEN
 import com.alpha.myeyecare.model.AppDestinations.WATER_REMINDER_SCREEN
 import com.alpha.myeyecare.ui.FeatureCard
 
@@ -59,7 +59,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 icon = Icons.Rounded.Visibility,
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                onClick = { navController.navigate(EYE_CARE_SCREEN) }
+                onClick = { navController.navigate(EYE_CARE_REMINDER_SCREEN) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
