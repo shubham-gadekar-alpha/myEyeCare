@@ -1,6 +1,7 @@
 package com.alpha.myeyecare
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -15,11 +16,13 @@ import com.alpha.myeyecare.localDb.ReminderPreferences
 import com.alpha.myeyecare.model.AppDestinations
 import com.alpha.myeyecare.model.ReminderTypes.DRINKING_REMINDER
 import com.alpha.myeyecare.model.ReminderTypes.EYE_REMINDER
+import com.alpha.myeyecare.model.Suggestion
 import com.alpha.myeyecare.ui.screens.HomeScreen
 import com.alpha.myeyecare.ui.screens.ReminderDetails
 import com.alpha.myeyecare.ui.screens.SetupReminderScreen
 import com.alpha.myeyecare.ui.screens.SplashScreen
 import com.alpha.myeyecare.ui.screens.UserSuggestionScreen
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +37,11 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+fun provideFirestore(): FirebaseFirestore {
+    val instance = FirebaseFirestore.getInstance()
+    return instance
 }
 
 @Composable
@@ -57,7 +65,30 @@ fun AppNavigation() {
                     navController.popBackStack()
                 },
                 onSubmitSuggestion = { name, email, text ->
+                    val firebaseDb = provideFirestore()
 
+                    // Create a new suggestion object
+                    val newSuggestion = Suggestion(
+                        // userId = Firebase.auth.currentUser?.uid, // Example if you have Firebase Auth
+                        name = name,
+                        email = email,
+                        text = text
+                        // timestamp will be set by the server
+                    )
+
+                    // Add a new document with a generated ID to the "suggestions" collection
+                    firebaseDb.collection("suggestions")
+                        .add(newSuggestion)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d("Firestore", "Suggestion added with ID: ${documentReference.id}")
+                            // Optionally: Show success message to user (e.g., Toast, Snackbar)
+                            // Optionally: Navigate back or clear fields
+                            navController.popBackStack() // Example: Go back after successful submission
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("Firestore", "Error adding suggestion", e)
+                            // Optionally: Show error message to user
+                        }
                 })
         }
 

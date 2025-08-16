@@ -93,7 +93,7 @@ fun UserSuggestionScreen(
                             // Example: Show a toast (replace with Snackbar for better UX)
                             android.widget.Toast.makeText(
                                 context,
-                                "Suggestion submitted!",
+                                "Thanks for the input. We will definitely consider your input and work on it",
                                 android.widget.Toast.LENGTH_SHORT
                             ).show()
                         }
