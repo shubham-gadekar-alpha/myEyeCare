@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 object ReminderScheduler {
 
 
-    fun scheduleReminder(context: Context, reminderDetails: ReminderDetails, reminderType: String) {
+    fun scheduleReminder(context: Context, reminderDetails: ReminderDetails, reminderType: String, onSuccess: () -> Unit) {
         val workManager = WorkManager.getInstance(context)
         // Use a more robust unique ID if titles can be duplicated.
         // For simplicity, using title.hashCode() as part of the tag.
@@ -200,6 +200,7 @@ object ReminderScheduler {
                 ExistingPeriodicWorkPolicy.REPLACE, // Or .KEEP if you don't want to replace if one exists
                 workRequest
             )
+            onSuccess.invoke()
             // Log.d("ReminderScheduler", "Enqueued unique periodic work: $workTag for ${reminderDetails.title}")
         } else if (workRequest is OneTimeWorkRequest) {
             workManager.enqueueUniqueWork(
@@ -207,6 +208,7 @@ object ReminderScheduler {
                 ExistingWorkPolicy.REPLACE, // Or .KEEP
                 workRequest
             )
+            onSuccess.invoke()
             // Log.d("ReminderScheduler", "Enqueued unique one-time work: $workTag for ${reminderDetails.title}")
         }
     }

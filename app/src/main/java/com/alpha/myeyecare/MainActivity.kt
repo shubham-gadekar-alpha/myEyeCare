@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.alpha.myeyecare.localDb.ReminderPreferences
 import com.alpha.myeyecare.model.AppDestinations
 import com.alpha.myeyecare.model.ReminderTypes.DRINKING_REMINDER
 import com.alpha.myeyecare.model.ReminderTypes.EYE_REMINDER
@@ -34,7 +36,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppNavigation() {
-    val navController = rememberNavController() // Create a NavController
+    val navController = rememberNavController()
+    val localDb = ReminderPreferences(LocalContext.current)
 
     NavHost(
         navController = navController,
@@ -50,7 +53,8 @@ fun AppNavigation() {
         ) {
             SetupReminderScreen(
                 reminderType = EYE_REMINDER,
-                initialDetails = ReminderDetails(title = "My Eye Care Break"),
+                localDb = localDb,
+                initialDetails = localDb.getReminder(EYE_REMINDER) ?: ReminderDetails(title = "My Eye Care Break"),
                 onSaveReminder = {
                     navController.popBackStack()
                 },
@@ -63,7 +67,8 @@ fun AppNavigation() {
         composable(AppDestinations.WATER_REMINDER_SCREEN) {
             SetupReminderScreen(
                 reminderType = DRINKING_REMINDER,
-                initialDetails = ReminderDetails(title = "Drink Water Break"),
+                localDb = localDb,
+                initialDetails = localDb.getReminder(DRINKING_REMINDER) ?: ReminderDetails(title = "Drink Water Break"),
                 onSaveReminder = {
                     navController.popBackStack()
                 },
