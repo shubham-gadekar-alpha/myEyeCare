@@ -19,6 +19,7 @@ import com.alpha.myeyecare.ui.screens.HomeScreen
 import com.alpha.myeyecare.ui.screens.ReminderDetails
 import com.alpha.myeyecare.ui.screens.SetupReminderScreen
 import com.alpha.myeyecare.ui.screens.SplashScreen
+import com.alpha.myeyecare.ui.screens.UserSuggestionScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +50,17 @@ fun AppNavigation() {
             HomeScreen(navController = navController)
         }
 
+        composable(AppDestinations.USER_SUGGESTION_SCREEN) {
+            UserSuggestionScreen(
+                navController = navController,
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                onSubmitSuggestion = { name, email, text ->
+
+                })
+        }
+
         composable(AppDestinations.SPLASH_SCREEN) {
             SplashScreen(navController = navController)
         }
@@ -59,7 +71,8 @@ fun AppNavigation() {
             SetupReminderScreen(
                 reminderType = EYE_REMINDER,
                 localDb = localDb,
-                initialDetails = localDb.getReminder(EYE_REMINDER) ?: ReminderDetails(title = "My Eye Care Break"),
+                initialDetails = localDb.getReminder(EYE_REMINDER)
+                    ?: ReminderDetails(title = "My Eye Care Break"),
                 onSaveReminder = {
                     navController.popBackStack()
                 },
@@ -73,7 +86,8 @@ fun AppNavigation() {
             SetupReminderScreen(
                 reminderType = DRINKING_REMINDER,
                 localDb = localDb,
-                initialDetails = localDb.getReminder(DRINKING_REMINDER) ?: ReminderDetails(title = "Drink Water Break"),
+                initialDetails = localDb.getReminder(DRINKING_REMINDER)
+                    ?: ReminderDetails(title = "Drink Water Break"),
                 onSaveReminder = {
                     navController.popBackStack()
                 },
