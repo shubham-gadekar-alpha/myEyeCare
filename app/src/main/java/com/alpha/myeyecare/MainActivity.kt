@@ -18,6 +18,7 @@ import com.alpha.myeyecare.model.ReminderTypes.EYE_REMINDER
 import com.alpha.myeyecare.ui.screens.HomeScreen
 import com.alpha.myeyecare.ui.screens.ReminderDetails
 import com.alpha.myeyecare.ui.screens.SetupReminderScreen
+import com.alpha.myeyecare.ui.screens.SplashScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,11 +42,15 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = AppDestinations.HOME_SCREEN // Set the starting screen
+        startDestination = AppDestinations.SPLASH_SCREEN // Set the starting screen
     ) {
 
         composable(AppDestinations.HOME_SCREEN) {
             HomeScreen(navController = navController)
+        }
+
+        composable(AppDestinations.SPLASH_SCREEN) {
+            SplashScreen(navController = navController)
         }
 
         composable(
