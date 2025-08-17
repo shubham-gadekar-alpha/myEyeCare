@@ -10,4 +10,5 @@ All notable changes to this project will be documented in this file.
  - Added the config values into local DB.
  - Added changelog file. 
 ### Changed
+ - Make singleton objects for Firebase & Shared preferences. 
 ### Fixed
