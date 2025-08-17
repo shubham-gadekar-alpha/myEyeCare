@@ -14,6 +14,14 @@ class ReminderPreferences(context: Context) {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     companion object {
+        fun getInstance(context: Context): ReminderPreferences {
+            if (!::instance.isInitialized) {
+                instance = ReminderPreferences(context)
+            }
+            return instance
+        }
+
+        private lateinit var instance: ReminderPreferences
         private const val PREFS_NAME = "reminder_prefs"
         private const val KEY_REMINDER_PREFIX = "reminder_" // Prefix for each reminder key
         // If you only plan to store ONE reminder, you can use a fixed key instead of a prefix.

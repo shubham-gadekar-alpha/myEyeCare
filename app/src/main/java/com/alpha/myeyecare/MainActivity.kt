@@ -25,6 +25,9 @@ import com.alpha.myeyecare.ui.screens.UserSuggestionScreen
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : ComponentActivity() {
+
+    lateinit var firebaseDb: FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NotificationUtils.createNotificationChannel(this)
@@ -32,22 +35,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    AppNavigation()
+                    AppNavigation(provideFirestore(), ReminderPreferences.getInstance(LocalContext.current))
                 }
             }
         }
     }
-}
 
-fun provideFirestore(): FirebaseFirestore {
-    val instance = FirebaseFirestore.getInstance()
-    return instance
+    fun provideFirestore(): FirebaseFirestore {
+        if (!::firebaseDb.isInitialized) {
+            firebaseDb = FirebaseFirestore.getInstance()
+        }
+        return firebaseDb
+    }
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(firebaseDb: FirebaseFirestore, localDb: ReminderPreferences) {
     val navController = rememberNavController()
-    val localDb = ReminderPreferences(LocalContext.current)
 
     NavHost(
         navController = navController,
@@ -65,8 +69,6 @@ fun AppNavigation() {
                     navController.popBackStack()
                 },
                 onSubmitSuggestion = { name, email, text ->
-                    val firebaseDb = provideFirestore()
-
                     // Create a new suggestion object
                     val newSuggestion = Suggestion(
                         // userId = Firebase.auth.currentUser?.uid, // Example if you have Firebase Auth
