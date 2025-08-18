@@ -69,6 +69,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.myeyecare.localDb.ReminderPreferences
+import com.alpha.myeyecare.viewModel.MainViewModel
 import com.alpha.myeyecare.worker.ReminderScheduler
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -131,8 +132,8 @@ private fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetupReminderScreen(
+    viewModel: MainViewModel,
     reminderType: String,
-    localDb: ReminderPreferences,
     initialDetails: ReminderDetails,
     onSaveReminder: (ReminderDetails) -> Unit,
     onBackIconPressed: () -> Unit
@@ -240,7 +241,7 @@ fun SetupReminderScreen(
                         isEnabled = !isEnabled
                         showTurnOffReminderDialog = false
                         ReminderScheduler.cancelReminderById(context, reminderType)
-                        localDb.updateReminderEnabledStatus(reminderType, false)
+                        viewModel.updateReminderEnabledStatus(reminderType, false)
                     }
                 ) { Text("Yes") }
             },
@@ -281,7 +282,7 @@ fun SetupReminderScreen(
                     )
                     // ----> Schedule the work <----
                     ReminderScheduler.scheduleReminder(context, detailsToSave, reminderType) {
-                        localDb.saveReminder(reminderType, detailsToSave)
+                        viewModel.saveReminder(reminderType, detailsToSave)
                     }
 
                     onSaveReminder(detailsToSave) // Call original onSaveReminder (e.g., to navigate back or update UI)

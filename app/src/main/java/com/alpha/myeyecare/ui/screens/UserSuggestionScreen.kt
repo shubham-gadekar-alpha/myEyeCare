@@ -23,14 +23,14 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.alpha.myeyecare.viewModel.MainViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserSuggestionScreen(
-    navController: NavController,
-    onNavigateBack: () -> Unit = {}, // Optional: For a back button in a TopAppBar
-    onSubmitSuggestion: (name: String, email: String, suggestion: String) -> Unit
+    viewModel: MainViewModel,
+    onNavigateBack: () -> Unit = {},
 ) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -86,7 +86,7 @@ fun UserSuggestionScreen(
 
                     if (isNameValid && isEmailValid && isSuggestionValid) {
                         focusManager.clearFocus() // Hide keyboard
-                        onSubmitSuggestion(name, email, suggestion)
+                        viewModel.submitSuggestion(name, email, suggestion)
                         // Optionally, show a success message (e.g., Toast or Snackbar)
                         // and navigate away or clear fields
                         coroutineScope.launch {
