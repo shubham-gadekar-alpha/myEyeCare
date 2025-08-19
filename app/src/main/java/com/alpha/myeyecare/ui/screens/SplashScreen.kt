@@ -49,16 +49,7 @@ fun SplashScreen(navController: NavController) {
     )
 
     LaunchedEffect(key1 = true) {
-        progress = 1f // Trigger the animation to start towards 1f
-        delay(2000L) // Total duration of the splash screen
-        navController.navigate(AppDestinations.HOME_SCREEN) {
-            // Pop Splash Sreen from backstack so user can't go back to it
-            popUpTo(AppDestinations.SPLASH_SCREEN) {
-                inclusive = true
-            }
-            // Avoid multiple copies of HomeScreen when re-navigating
-            launchSingleTop = true
-        }
+        progress = 1f
     }
 
     Box(
