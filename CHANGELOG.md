@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased] - YYYY-MM-DD
 ### Added
+- Refactor & Removed unwanted code.
 - Modified code with Clean Architecture.
 - Added the Notification permission check on Home screen & before saving the reminder.
 - Introduced the ViewModel.
