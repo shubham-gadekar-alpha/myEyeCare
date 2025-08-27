@@ -79,6 +79,13 @@ dependencies {
     // ViewModel & Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
+
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 }
 
 kapt {

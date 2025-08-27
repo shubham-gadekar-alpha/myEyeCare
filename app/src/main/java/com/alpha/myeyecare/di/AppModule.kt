@@ -1,9 +1,9 @@
 package com.alpha.myeyecare.di
 
-import com.alpha.myeyecare.repository.ISuggestionRepository
-import com.alpha.myeyecare.repository.LocalDbRepository
-import com.alpha.myeyecare.repository.LocalDbRepositoryImpl
-import com.alpha.myeyecare.repository.SuggestionRepository
+import com.alpha.myeyecare.data.repository.ReminderRepositoryImpl
+import com.alpha.myeyecare.domain.repository.SuggestionRepository
+import com.alpha.myeyecare.data.repository.SuggestionRepositoryImpl
+import com.alpha.myeyecare.domain.repository.ReminderRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,12 +17,18 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindSuggestionRepository(
-        suggestionRepositoryImpl: SuggestionRepository
-    ): ISuggestionRepository
+        suggestionRepositoryImpl: SuggestionRepositoryImpl
+    ): SuggestionRepository
 
     @Singleton
     @Binds
     abstract fun bindLocalDbRepository(
         localDbRepositoryImpl: LocalDbRepositoryImpl
     ): LocalDbRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindReminderRepository(
+        reminderRepositoryImpl: ReminderRepositoryImpl
+    ): ReminderRepository
 }
