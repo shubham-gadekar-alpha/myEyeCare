@@ -21,13 +21,13 @@ This repository is mainly created for **learning purposes** and is **open to con
 ✅ User-friendly **UI with Material Design**  
 ✅ Lightweight & battery-efficient  
 ✅ Free & Open Source  
-✅ Perfect for **Android learning** (Jetpack Compose, MVVM, Room, etc.)
+✅ Perfect for **Android learning** (Jetpack Compose, MVVM, Room, Clean Architecture, etc.)
 
 ---
 
 ## 🛠 Tech Stack
 - **Language**: Kotlin
-- **Architecture**: MVVM (Model-View-ViewModel)
+- **Architecture**: MVVM (Model-View-ViewModel) with Clean Architecture 
 - **UI Toolkit**: Jetpack Compose
 - **Local Storage**: Room Database
 - **Dependency Injection**: Hilt
@@ -38,91 +38,81 @@ This repository is mainly created for **learning purposes** and is **open to con
 
 ## 📂 Repository Structure
 
-
 ```plaintext
 
-com.alpha.books_explorer/ 
+com.alpha.myeyecare/ 
 │ 
-├── data/                           # Data Layer (API + DB) 
-│   ├── local/                      # Room database 
+├── common/                          
+│   ├── constants/ 
+│   │   ├── AppDestinations.kt
+│   │   └── ReminderTypes.kt 
+│   └── utils/ 
+│       ├── ExtensionFunctions.kt            
+│       └── UtilFunctions.kt         
+│ 
+├── data/                            
+│   ├── local/                       
 │   │   ├── converters/ 
 │   │   │   ├── Converters.kt 
 │   │   ├── dao/ 
-│   │   │   ├── FavBookDao.kt 
-│   │   │   ├── ReadingList.kt 
+│   │   │   ├── ReminderDao.kt  
 │   │   ├── entities/ 
-│   │   │   ├── BookEntity.kt 
-│   │   │   ├── ReadingListEntity.kt 
-│   │   └── FavBookDatabase.kt 
+│   │   │   ├── Reminder.kt  
+│   │   └── ReminderDatabase.kt 
 │   │ 
-│   ├── paging/  
-│   │   ├── BooksPagingSource.kt 
-│   ├── remote/                     # Retrofit API 
-│   │   ├── BookApiService.kt 
-│   │   └── dto/ 
-│   │       ├── BookSearchResponse.kt 
-│   │ 
-│   ├── repository/                 # Repository implementation 
-│   │   └── BookRepositoryImpl.kt 
-│   │ 
-│   └── mappers/                    # DTO ↔ Entity ↔ Domain 
-│       ├── BookMapper.kt 
-│ 
-├── domain/                         # Domain Layer (business logic) 
+│   └── repository/                 # Repository implementation
+│       ├── SuggectionRepositoryImpl.kt  
+│       └── ReminderRepositoryImpl.kt  
+│  
+├── di/                             
+│   ├── AppModule.kt 
+│   ├── DatabaseModule.kt
+│   └── RemoteModule.kt 
+│
+├── domain/                         
 │   ├── model/ 
-│   │   ├── Book.kt 
+│   │   ├── DaysOfWeek.kt 
+│   │   ├── ReminderDetails.kt 
+│   │   ├── ReminderFrequency.kt 
+│   │   └── Suggestion.kt 
 │   │ 
 │   ├── repository/                 # Abstract repository interfaces 
-│   │   └── BookRepository.kt 
+│   │   ├── ReminderRepository.kt 
+│   │   └── SuggestionRepository.kt 
 │   │ 
-│   └── usecase/                    # Use cases 
-│       ├── GetBooksUseCase.kt 
-│       ├── SearchBooksUseCase.kt 
-│       ├── GetBookDetailsUseCase.kt 
-│       ├── SaveFavoriteBookUseCase.kt 
-│       └── GetFavoriteBooksUseCase.kt 
+│   └── usecase/                   
+│       ├── CheckReminderStatusUseCase.kt 
+│       ├── GetReminderDetailsUserCase.kt 
+│       ├── SaveReminderUseCase.kt  
+│       └── SaveSuggestionsUseCase.kt 
 │ 
-├── di/                             # Dependency Injection (Hilt) 
-│   ├── LocalDbModule.kt 
-│   ├── NetworkModule.kt 
-│ 
-├── presentation/                   # Presentation Layer 
-│   ├── ui/                         # Compose UI 
-│   │   ├── home/ 
-│   │   │   ├── HomeScreen.kt 
-│   │   │   ├── HomeViewModel.kt 
-│   │   │   └── HomeUiState.kt 
-│   │   ├── search/ 
-│   │   │   ├── SearchScreen.kt 
-│   │   │   ├── SearchViewModel.kt 
-│   │   │   └── SearchUiState.kt 
-│   │   ├── details/ 
-│   │   │   ├── BookDetailScreen.kt 
-│   │   │   ├── BookDetailViewModel.kt 
-│   │   │   └── BookDetailUiState.kt 
-│   │   ├── favorites/ 
-│   │   │   ├── FavoritesScreen.kt 
-│   │   │   ├── FavoritesViewModel.kt 
-│   │   │   └── FavoritesUiState.kt 
-│   │   └── profile/ 
-│   │       ├── ProfileScreen.kt 
-│   │       ├── ProfileViewModel.kt 
-│   │       └── ProfileUiState.kt 
-│   │ 
-│   │ 
-│   └── navigation/ 
-│       └── NavGraph.kt 
-│ 
-├── common/                         # Common utilities & helpers 
-│   ├── constants/ 
-│   │   └── ApiConstants.kt 
-│   ├── utils/ 
-│   │   ├── NetworkResult.kt        # Sealed class for Success/Error/Loading 
-│   │   ├── Extensions.kt           # Common extension functions 
-│   │   └── DispatcherProvider.kt   # For coroutines testability 
-│ 
-├── MainActivity.kt                  # Host Compose + Navigation 
-└── BooksExplorerApplication.kt               # Application class (Hilt)  
+├── presentation/                  
+│   ├── navigation/ 
+│   │    └── NavGraph.kt  
+│   └── ui/                   
+│       ├── common/ 
+│       │   └── CommonUI.kt
+│       ├── detailsScreen/ 
+│       │   ├── SetupReminderScreen.kt
+│       │   └── SetupReminderViewModel.kt
+│       ├── home/ 
+│       │   └── HomeScreen.kt 
+│       ├── splash/ 
+│       │   ├── SplashScreen.kt
+│       │   └── SplashViewModel.kt 
+│       ├── suggestion/ 
+│       │   ├── SuggestionSubmissionViewModel.kt 
+│       │   └── UserSuggestionScreen.kt
+│       ├── theme/ 
+│       │   ├── Color.kt 
+│       │   ├── Theme.kt 
+│       │   └── Type.kt 
+│       └── userPermission.kt  
+├── Worker/                  
+│   ├── ReminderScheduler.kt
+│   └── ReminderWorker.kt 
+├── MainActivity.kt                   
+└── MyApplication.kt                 
 
 ```
 
@@ -147,7 +137,8 @@ If you’d like to add new features, improve UI/UX, or optimize performance:
 ---
 
 ## 👨‍💻 Developers
-- [Your Name] (Lead Developer)
+- [Shubham Gadekar]
+- [Nitin Tyagi]
 - Open to all contributors! Add yourself here via PR.
 
 ---
