@@ -18,7 +18,6 @@ import androidx.work.WorkerParameters
 import com.alpha.myeyecare.MainActivity
 import com.alpha.myeyecare.domain.model.DayOfWeek
 
-
 class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
 
@@ -31,29 +30,25 @@ class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :
     }
 
     override suspend fun doWork(): Result {
-        val notificationId = inputData.getInt(NOTIFICATION_ID_KEY, System.currentTimeMillis().toInt())
+        val notificationId =
+            inputData.getInt(NOTIFICATION_ID_KEY, System.currentTimeMillis().toInt())
         val title = inputData.getString(NOTIFICATION_TITLE_KEY) ?: "Reminder"
         val message = inputData.getString(NOTIFICATION_MESSAGE_KEY) ?: "It's time!"
 
         val selectedDaysString = inputData.getString("selected_days")
         if (selectedDaysString != null) {
-            // This worker was scheduled for SPECIFIC_DAYS
             val selectedDays = selectedDaysString.split(",").map { DayOfWeek.valueOf(it) }.toSet()
             val todayCalendar = Calendar.getInstance()
             if (!isTodaySelected(todayCalendar, selectedDays)) {
-                // Log.d("ReminderWorker", "Not a selected day. Skipping notification for $title.")
-                // Reschedule for tomorrow is handled by PeriodicWorkRequest
-                return Result.success() // Success, as the work itself is "done" for today
+                return Result.success()
             }
         }
 
         try {
             sendNotification(applicationContext, notificationId, title, message)
-            // If it's a one-time reminder, it will complete here.
-            // For periodic reminders, WorkManager handles rescheduling.
             return Result.success()
         } catch (e: Exception) {
-             Log.e("ReminderWorker", "Error sending notification", e)
+            Log.e("ReminderWorker", "Error sending notification", e)
             return Result.failure()
         }
     }
@@ -63,30 +58,23 @@ class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :
 
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            // You can add extras to the intent if you want to navigate
-            // to a specific part of your app when the notification is clicked.
-            // intent.putExtra("navigateTo", "reminder_details_screen")
-            // intent.putExtra("reminderId", inputData.getString("reminder_unique_id")) // If you pass one
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             context,
-            id, // Use unique request code for each pending intent if they are different
+            id,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_menu_view) // Replace with your notification icon
+            .setSmallIcon(android.R.drawable.ic_menu_view)
             .setContentTitle(title)
             .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_HIGH) // For heads-up notification
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
-        // Optional: Add actions, vibration, sound
-        // .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
-        // .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 
         with(NotificationManagerCompat.from(context)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -95,9 +83,6 @@ class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :
                         Manifest.permission.POST_NOTIFICATIONS
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
-                    // This should ideally be handled before scheduling the worker by requesting permission.
-                    // If permission is not granted here, the notification won't show.
-                    // Log.w("ReminderWorker", "POST_NOTIFICATIONS permission not granted.")
                     return
                 }
             }
@@ -109,13 +94,9 @@ class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = CHANNEL_NAME
             val descriptionText = "Channel for reminder notifications"
-            val importance = NotificationManager.IMPORTANCE_HIGH // High importance for reminders
+            val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
-                // Optional: set light color, vibration pattern for the channel
-                // enableLights(true)
-                // lightColor = Color.RED
-                // enableVibration(true)
             }
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -123,9 +104,8 @@ class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :
         }
     }
 
-    // Add this helper in ReminderWorker or a shared utility class
     private fun isTodaySelected(calendar: Calendar, selectedDays: Set<DayOfWeek>): Boolean {
-        if (selectedDays.isEmpty()) return false // Should not happen if selectedDaysString was present
+        if (selectedDays.isEmpty()) return false
         val dayOfWeekToday = calendar.get(Calendar.DAY_OF_WEEK)
         return selectedDays.any { selectedDay ->
             when (selectedDay) {

@@ -1,6 +1,5 @@
-package com.alpha.myeyecare.ui.theme
+package com.alpha.myeyecare.presentation.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

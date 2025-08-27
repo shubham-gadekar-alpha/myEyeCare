@@ -7,7 +7,7 @@ import com.alpha.myeyecare.data.local.converters.Converters
 import com.alpha.myeyecare.data.local.dao.ReminderDao
 import com.alpha.myeyecare.data.local.entities.Reminder
 
-@Database(entities = [Reminder::class], version = 1)
+@Database(entities = [Reminder::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class ReminderDatabase : RoomDatabase() {
 
