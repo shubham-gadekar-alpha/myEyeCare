@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased] - YYYY-MM-DD
 ### Added
- - Introduced the ViewModel.
+- Introduced the ViewModel.
+### Changed
+### Fixed 
+
+## [release-v1.0] - 19th August, 25 Tuesday
+### Added
  - Connected the suggestions to backend and stored suggestions to db
  - Added User's Suggestions screen. 
  - Added Splash screen.
