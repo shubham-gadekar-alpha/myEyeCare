@@ -16,7 +16,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.alpha.myeyecare.MainActivity
-import com.alpha.myeyecare.ui.screens.DayOfWeek
+import com.alpha.myeyecare.domain.model.DayOfWeek
 
 
 class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :

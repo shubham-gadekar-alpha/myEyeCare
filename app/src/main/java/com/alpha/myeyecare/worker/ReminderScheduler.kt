@@ -11,9 +11,9 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import androidx.work.workDataOf
-import com.alpha.myeyecare.ui.screens.DayOfWeek
-import com.alpha.myeyecare.ui.screens.ReminderDetails
-import com.alpha.myeyecare.ui.screens.ReminderFrequency
+import com.alpha.myeyecare.domain.model.DayOfWeek
+import com.alpha.myeyecare.domain.model.ReminderDetails
+import com.alpha.myeyecare.domain.model.ReminderFrequency
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
