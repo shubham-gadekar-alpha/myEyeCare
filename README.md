@@ -137,8 +137,8 @@ If you’d like to add new features, improve UI/UX, or optimize performance:
 ---
 
 ## 👨‍💻 Developers
-- [Shubham Gadekar]
-- [Nitin Tyagi]
+- [Shubham Gadekar] (Developer)
+- [Nitin Tyagi] (Developer)
 - Open to all contributors! Add yourself here via PR.
 
 ---
