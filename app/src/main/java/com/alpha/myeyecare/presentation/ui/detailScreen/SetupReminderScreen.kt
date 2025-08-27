@@ -61,6 +61,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -105,13 +107,13 @@ fun SetupReminderScreen(
 
     var reminderTitle by remember { mutableStateOf(initialDetails.title) }
 
-    var selectedHour by remember { mutableStateOf(initialDetails.hour) }
-    var selectedMinute by remember { mutableStateOf(initialDetails.minute) }
-    var startDateMillis by remember { mutableStateOf(initialDetails.startDateMillis) }
+    var selectedHour by remember { mutableIntStateOf(initialDetails.hour) }
+    var selectedMinute by remember { mutableIntStateOf(initialDetails.minute) }
+    var startDateMillis by remember { mutableLongStateOf(initialDetails.startDateMillis) }
 
     var selectedFrequency by remember { mutableStateOf(initialDetails.frequency) }
     var selectedDays by remember { mutableStateOf<Set<DayOfWeek>>(LinkedHashSet(initialDetails.selectedDays)) }
-    var customIntervalMinutes by remember { mutableStateOf(initialDetails.customIntervalMinutes) }
+    var customIntervalMinutes by remember { mutableIntStateOf(initialDetails.customIntervalMinutes) }
     var isEnabled by remember { mutableStateOf(initialDetails.isEnabled) }
 
     var showDatePickerDialog by remember { mutableStateOf(false) }
