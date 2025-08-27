@@ -22,12 +22,6 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun bindLocalDbRepository(
-        localDbRepositoryImpl: LocalDbRepositoryImpl
-    ): LocalDbRepository
-
-    @Singleton
-    @Binds
     abstract fun bindReminderRepository(
         reminderRepositoryImpl: ReminderRepositoryImpl
     ): ReminderRepository
