@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - YYYY-MM-DD
+## [release-v1.1.0] - 27th August, 25 Wednesday
 ### Added
 - Refactor & Removed unwanted code.
 - Modified code with Clean Architecture.
