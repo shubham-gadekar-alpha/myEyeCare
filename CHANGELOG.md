@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Introduced the ViewModel.
 ### Changed
 ### Fixed 
+- Fixed the issue of not clicking Submit button on dialog dismiss.  
 
 ## [release-v1.0] - 19th August, 25 Tuesday
 ### Added

@@ -32,7 +32,7 @@ fun CheckUserNotificationPermission(
     var permissionAlreadyRequested by remember { mutableStateOf(false) } // To avoid multiple requests
 
     if (shouldCheckPermission) {
-    // Only handle POST_NOTIFICATIONS on Android 13 (API 33) and above, no need to check permissions below this version.
+        // Only handle POST_NOTIFICATIONS on Android 13 (API 33) and above, no need to check permissions below this version.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val notificationPermissionState = rememberPermissionState(
                 permission = Manifest.permission.POST_NOTIFICATIONS
@@ -75,7 +75,10 @@ fun CheckUserNotificationPermission(
 
             if (showPermissionRationaleDialog) {
                 AlertDialog(
-                    onDismissRequest = { showPermissionRationaleDialog = false },
+                    onDismissRequest = {
+                        onActionClick.invoke()
+                        showPermissionRationaleDialog = false
+                    },
                     title = { Text("Notification Permission") },
                     text = { Text("To keep you updated with your alerts, our app needs permission to send you notifications.") },
                     confirmButton = {
@@ -103,7 +106,10 @@ fun CheckUserNotificationPermission(
 
             if (showSettingsRedirectDialog) {
                 AlertDialog(
-                    onDismissRequest = { showSettingsRedirectDialog = false },
+                    onDismissRequest = {
+                        onActionClick.invoke()
+                        showSettingsRedirectDialog = false
+                    },
                     title = { Text("Notification Permission Required") },
                     text = { Text("Notifications are currently disabled. Please enable them in app settings to receive respective notifications.") },
                     confirmButton = {
