@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+ - Added Exit dialog on Home screen on back press.  
+### Changed
+### Fixed
+
 ## [release-v1.1.0] - 27th August, 25 Wednesday
 ### Added
 - Refactor & Removed unwanted code.
