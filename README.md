@@ -2,6 +2,7 @@
 
 [![Play Store](https://img.shields.io/badge/Download-PlayStore-green?logo=googleplay)](https://play.google.com/store/apps/details?id=com.alpha.myeyecare)  
 _A simple yet powerful reminder app to take care of your **eye health** and **hydration needs**._
+(**This app in under review and available for testing only, if you wish to test this app please share me your email so that I can share a link with you and share app with you**)
 
 ---
 
