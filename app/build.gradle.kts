@@ -92,8 +92,8 @@ tasks.register<JacocoReport>("jacocoTestReport") {
             "**/com/alpha/myeyecare/presentation/ui/splash/SplashScreen*.*",
             "**/presentation/ui/splash/ComposableSingletons\$SplashScreen*.*",
 
-            "**/com/alpha/myeyecare/presentation/ui/UserPermission*.*",
-            "**/presentation/ui/ComposableSingletons\$UserPermission*.*",
+            "**/com/alpha/myeyecare/presentation/ui/CheckUserNotificationPermission*.*",
+            "**/presentation/ui/ComposableSingletons\$CheckUserNotificationPermission*.*",
 
             "**/com/alpha/myeyecare/presentation/ui/home/HomeScreen*.*",
             "**/presentation/ui/home/ComposableSingletons\$HomeScreen*.*",
