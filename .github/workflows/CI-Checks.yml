@@ -15,6 +15,7 @@ jobs:
   # 1. Build Job
   # -------------------------------
   Debug-build-check:
+    name: Debug Build Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -43,6 +44,7 @@ jobs:
   # 2. Detekt Lint Job
   # -------------------------------
   Detekt-Check:
+    name: Detekt Check
     runs-on: ubuntu-latest
     needs: Debug-build-check   # ✅ ensures build succeeds first
     permissions:
@@ -93,6 +95,7 @@ jobs:
   # 3. Unit Test + Coverage Job
   # -------------------------------
   Unit-Tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
     needs: Detekt-Check   # ✅ ensures build succeeds first
     permissions:
