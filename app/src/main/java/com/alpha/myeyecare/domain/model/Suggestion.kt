@@ -11,6 +11,4 @@ data class Suggestion(
     @ServerTimestamp
     val timestamp: Date? = null,
     val status: String = "new"
-) {
-    constructor() : this(null, "", "", "", null, "new")
-}
+)

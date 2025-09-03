@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.google.service)
     alias(libs.plugins.hilt.android)
     id("kotlin-kapt")
+    id("jacoco")
 }
 
 android {
@@ -22,6 +23,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -40,6 +45,80 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.10" // use latest
+}
+
+tasks.withType<Test>().configureEach {
+    extensions.configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest") // make sure tests run first
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(true)
+    }
+
+    val debugTree = fileTree("${project.buildDir}/tmp/kotlin-classes/debug") {
+        include("**/com/alpha/**")
+        exclude(
+            "**/R.class",
+            "**/R$*.class",
+            "**/BuildConfig.*",
+            "**/Manifest*.*",
+            "**/*Test*.*",
+            "android/**/*.*",
+
+            "**/com/alpha/myeyecare/presentation/ui/detailScreen/SetupReminderScreen*.*",
+            "**/presentation/ui/detailScreen/ComposableSingletons\$SetupReminderScreen*.*",
+
+            "**/com/alpha/myeyecare/presentation/ui/suggestion/UserSuggestionScreen*.*",
+            "**/presentation/ui/suggestion/ComposableSingletons\$UserSuggestionScreen*.*",
+
+            "**/com/alpha/myeyecare/presentation/ui/splash/SplashScreen*.*",
+            "**/presentation/ui/splash/ComposableSingletons\$SplashScreen*.*",
+
+            "**/com/alpha/myeyecare/presentation/ui/UserPermission*.*",
+            "**/presentation/ui/ComposableSingletons\$UserPermission*.*",
+
+            "**/com/alpha/myeyecare/presentation/ui/home/HomeScreen*.*",
+            "**/presentation/ui/home/ComposableSingletons\$HomeScreen*.*",
+
+            "**/com/alpha/myeyecare/presentation/ui/common/**/*.*",
+            "**/com/alpha/myeyecare/common/**/*.*",
+            "**/com/alpha/myeyecare/data/**/*.*",
+            "**/com/alpha/myeyecare/di/**/*.*",
+            "**/com/alpha/myeyecare/domain/model/**/*.*",
+            "**/com/alpha/myeyecare/domain/repository/**/*.*",
+            "**/com/alpha/myeyecare/presentation/navigation/**/*.*",
+            "**/com/alpha/myeyecare/presentation/ui/theme/**/*.*",
+            "**/com/alpha/myeyecare/worker/**/*.*",
+
+            "**/MyApplication*.*",
+            "**/MainActivity*.*",
+            "**/ComposableSingletons\$MainActivity*.*",
+        )
+    }
+
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    classDirectories.setFrom(files(debugTree))
+    executionData.setFrom(fileTree(project.buildDir) {
+        include(
+            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+        )
+    })
 }
 
 dependencies {
@@ -97,6 +176,22 @@ dependencies {
 
     // Notification Permission
     implementation(libs.accompanist.permissions)
+
+    // Testing
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.turbine)
+    testImplementation(libs.truth)
+
+    // Mocking
+    testImplementation(libs.mockk)
+
+    // Coroutines
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+    testImplementation(libs.coroutines.test)
+
+    testImplementation(libs.androidx.core.testing)
 }
 
 kapt {

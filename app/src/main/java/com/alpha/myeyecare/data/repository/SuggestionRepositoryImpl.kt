@@ -1,8 +1,8 @@
 package com.alpha.myeyecare.data.repository
 
 import android.util.Log
-import com.alpha.myeyecare.domain.repository.SuggestionRepository
 import com.alpha.myeyecare.domain.model.Suggestion
+import com.alpha.myeyecare.domain.repository.SuggestionRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
