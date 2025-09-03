@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
- - Dummy entry to check PR checks. 
+ - Dummy entry to check PR checks
  - Added Github Actions for test case coverage. 
  - Implemented test case coverage
  - Added Exit dialog on Home screen on back press.  
