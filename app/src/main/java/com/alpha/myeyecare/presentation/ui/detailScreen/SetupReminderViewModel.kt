@@ -6,11 +6,11 @@ import com.alpha.myeyecare.domain.model.ReminderDetails
 import com.alpha.myeyecare.domain.useCases.GetReminderDetailsUserCase
 import com.alpha.myeyecare.domain.useCases.SaveReminderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class SetupReminderViewModel @Inject constructor(
@@ -33,19 +33,23 @@ class SetupReminderViewModel @Inject constructor(
     fun updateReminderEnabledStatus(reminderType: String, enableStatus: Boolean) {
         viewModelScope.launch {
             getReminderDetailsUserCase.invoke(reminderType).collect { reminderDetail ->
-                saveReminderUseCase.invoke(reminderDetail.apply {
-                    type = reminderType
-                    isEnabled = enableStatus
-                })
+                saveReminderUseCase.invoke(
+                    reminderDetail.apply {
+                        type = reminderType
+                        isEnabled = enableStatus
+                    }
+                )
             }
         }
     }
 
     fun saveReminder(reminderType: String, reminderDetails: ReminderDetails) {
         viewModelScope.launch {
-            saveReminderUseCase.invoke(reminderDetails.apply {
-                type = reminderType
-            })
+            saveReminderUseCase.invoke(
+                reminderDetails.apply {
+                    type = reminderType
+                }
+            )
         }
     }
 }

@@ -96,7 +96,6 @@ fun SetupReminderScreen(
     onSaveReminder: (ReminderDetails) -> Unit,
     onBackIconPressed: () -> Unit
 ) {
-
     LaunchedEffect(Unit) {
         viewModel.fetchData(reminderType)
     }
@@ -127,9 +126,7 @@ fun SetupReminderScreen(
         initialSelectedDateMillis = startDateMillis,
     )
     val timePickerState = rememberTimePickerState(
-        initialHour = selectedHour,
-        initialMinute = selectedMinute,
-        is24Hour = false
+        initialHour = selectedHour, initialMinute = selectedMinute, is24Hour = false
     )
 
     LaunchedEffect(viewModel.reminderDetails) {
@@ -155,7 +152,11 @@ fun SetupReminderScreen(
                     hour = selectedHour,
                     minute = selectedMinute,
                     frequency = selectedFrequency,
-                    selectedDays = if (selectedFrequency == ReminderFrequency.SPECIFIC_DAYS) selectedDays else emptySet(),
+                    selectedDays = if (selectedFrequency == ReminderFrequency.SPECIFIC_DAYS) {
+                        selectedDays
+                    } else {
+                        emptySet()
+                    },
                     customIntervalMinutes = customIntervalMinutes,
                     startDateMillis = startDateMillis,
                     isEnabled = isEnabled
@@ -184,10 +185,8 @@ fun SetupReminderScreen(
                         datePickerState.selectedDateMillis?.let { millis ->
                             startDateMillis = millis // Update the screen's state
                         }
-                    }
-                ) { Text("OK") }
-            },
-            dismissButton = {
+                    }) { Text("OK") }
+            }, dismissButton = {
                 TextButton(onClick = { showDatePickerDialog = false }) { Text("Cancel") }
             }
         ) {
@@ -272,8 +271,7 @@ fun SetupReminderScreen(
                     navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
-        },
-        floatingActionButton = {
+        }, floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
                     shouldCheckPermission = true
@@ -281,8 +279,7 @@ fun SetupReminderScreen(
                 icon = { Icon(Icons.Filled.Check, "Save Reminder") },
                 text = { Text("Save Reminder") },
             )
-        },
-        floatingActionButtonPosition = FabPosition.Companion.Center
+        }, floatingActionButtonPosition = FabPosition.Companion.Center
     ) { paddingValues ->
         Column(
             modifier = Modifier.Companion
@@ -312,8 +309,7 @@ fun SetupReminderScreen(
                 modifier = Modifier.Companion.fillMaxWidth(),
                 leadingIcon = {
                     Icon(
-                        Icons.Filled.DriveFileRenameOutline,
-                        contentDescription = "Reminder Name"
+                        Icons.Filled.DriveFileRenameOutline, contentDescription = "Reminder Name"
                     )
                 },
                 singleLine = true,
@@ -343,8 +339,7 @@ fun SetupReminderScreen(
             Spacer(modifier = Modifier.Companion.height(24.dp))
             SectionTitle(text = "Frequency")
             FrequencySelector(
-                selectedFrequency = selectedFrequency,
-                onFrequencySelected = { newFrequency ->
+                selectedFrequency = selectedFrequency, onFrequencySelected = { newFrequency ->
                     selectedFrequency = newFrequency
                     if (newFrequency != ReminderFrequency.SPECIFIC_DAYS) {
                         selectedDays = emptySet()
@@ -355,8 +350,7 @@ fun SetupReminderScreen(
             if (selectedFrequency == ReminderFrequency.SPECIFIC_DAYS) {
                 Spacer(modifier = Modifier.Companion.height(12.dp))
                 DayOfWeekSelector(
-                    selectedDays = selectedDays,
-                    onDaySelected = { day ->
+                    selectedDays = selectedDays, onDaySelected = { day ->
                         selectedDays = if (selectedDays.contains(day)) {
                             LinkedHashSet(selectedDays - day)
                         } else {
@@ -380,7 +374,6 @@ fun SetupReminderScreen(
                         } else {
                             15
                         }
-
                     },
                     label = { Text("Interval (min 15 mins)") },
                     modifier = Modifier.Companion.fillMaxWidth(),
@@ -406,8 +399,7 @@ fun SetupReminderScreen(
                     }
                     .padding(vertical = 12.dp),
                 verticalAlignment = Alignment.Companion.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+                horizontalArrangement = Arrangement.SpaceBetween) {
                 Row(verticalAlignment = Alignment.Companion.CenterVertically) {
                     Icon(
                         imageVector = if (isEnabled) Icons.Filled.NotificationsActive else Icons.Filled.NotificationsOff,
@@ -430,8 +422,7 @@ fun SetupReminderScreen(
                         } else {
                             isEnabled = !isEnabled
                         }
-                    },
-                    colors = SwitchDefaults.colors(
+                    }, colors = SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.primary,
                         checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
                         uncheckedThumbColor = MaterialTheme.colorScheme.outline,
@@ -439,7 +430,6 @@ fun SetupReminderScreen(
                     )
                 )
             }
-
             Spacer(modifier = Modifier.Companion.height(80.dp))
         }
     }
@@ -472,8 +462,7 @@ fun SettingItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp) // Flat design
     ) {
         Row(
-            modifier = Modifier.Companion
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.Companion.padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.Companion.CenterVertically
         ) {
             Icon(
@@ -532,7 +521,9 @@ fun FrequencySelector(
                                 modifier = Modifier.Companion.size(FilterChipDefaults.IconSize)
                             )
                         }
-                    } else null,
+                    } else {
+                        null
+                    },
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,

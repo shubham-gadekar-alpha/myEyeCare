@@ -1,0 +1,59 @@
+name: Detekt Check
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write  # needed to post PR comments
+
+jobs:
+  detekt:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant Gradle executable permissions
+        run: chmod +x gradlew
+
+      - name: Run Detekt
+        run: ./gradlew detekt
+
+      - name: Upload Detekt HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: detekt-report
+          path: app/build/reports/detekt/detekt.html
+
+      - name: Comment Detekt issues on PR
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: app/build/reports/detekt/detekt.xml
+          header: "### Detekt Lint Report"
+          recreate: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Post success message if no Detekt issues
+        if: github.event_name == 'pull_request' && !failure()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: "### Detekt Lint Report"
+          message: "No Detekt issues found. 🎉"
+          recreate: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

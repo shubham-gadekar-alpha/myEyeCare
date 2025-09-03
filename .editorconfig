@@ -1,0 +1,9 @@
+root = true
+
+[*.{kt,kts}]
+indent_size =
+4indent_style =
+spacemax_line_length =
+120insert_final_newline = true # Android specific
+sij_kotlin_allow_trailing_comma = true
+ij_kotlin_imports_layout = *,java.**,javax.**,kotlin.**,kotlinx.**

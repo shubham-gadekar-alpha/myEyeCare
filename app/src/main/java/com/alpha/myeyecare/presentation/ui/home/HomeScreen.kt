@@ -49,7 +49,6 @@ fun HomeScreen(
     onGoToSuggestionsClicked: () -> Unit,
     updatePermissionStatus: () -> Unit
 ) {
-
     var showExitDialog by remember { mutableStateOf(false) }
     val activity = (LocalContext.current as? Activity)
 
@@ -62,8 +61,7 @@ fun HomeScreen(
             onConfirmExit = {
                 showExitDialog = false
                 activity?.finish()
-            },
-            onDismiss = {
+            }, onDismiss = {
                 showExitDialog = false
             }
         )
@@ -72,9 +70,7 @@ fun HomeScreen(
     CheckUserNotificationPermission(
         fromReminderDetailsScreen = false,
         shouldCheckPermission,
-        permissionGranted = {
-
-        },
+        permissionGranted = {},
         onActionClick = {
             updatePermissionStatus.invoke()
         }
@@ -89,16 +85,14 @@ fun HomeScreen(
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
-        },
-        floatingActionButton = {
+        }, floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
                     onGoToSuggestionsClicked.invoke()
                 },
                 icon = {
                     Icon(
-                        Icons.Filled.RateReview,
-                        contentDescription = "Suggestion Icon"
+                        Icons.Filled.RateReview, contentDescription = "Suggestion Icon"
                     )
                 },
                 text = {
@@ -107,8 +101,7 @@ fun HomeScreen(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             )
-        },
-        floatingActionButtonPosition = FabPosition.Companion.End
+        }, floatingActionButtonPosition = FabPosition.Companion.End
     ) { paddingValues ->
         Column(
             modifier = modifier
@@ -130,8 +123,7 @@ fun HomeScreen(
                 icon = Icons.Rounded.Visibility,
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                onClick = { navController.navigate(AppDestinations.EYE_CARE_REMINDER_SCREEN) }
-            )
+                onClick = { navController.navigate(AppDestinations.EYE_CARE_REMINDER_SCREEN) })
 
             Spacer(modifier = Modifier.Companion.height(24.dp))
 
@@ -141,8 +133,7 @@ fun HomeScreen(
                 icon = Icons.Filled.WaterDrop,
                 backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
                 contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                onClick = { navController.navigate(AppDestinations.WATER_REMINDER_SCREEN) }
-            )
+                onClick = { navController.navigate(AppDestinations.WATER_REMINDER_SCREEN) })
 
             Spacer(modifier = Modifier.Companion.weight(1f))
 

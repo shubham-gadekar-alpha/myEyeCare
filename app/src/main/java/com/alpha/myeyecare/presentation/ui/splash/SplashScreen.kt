@@ -92,7 +92,9 @@ fun SplashScreen(
             )
             Spacer(modifier = Modifier.Companion.height(8.dp))
             Text(
-                text = "Loading...", color = Color.Companion.White, fontSize = 12.sp
+                text = "Loading...",
+                color = Color.Companion.White,
+                fontSize = 12.sp
             )
         }
     }

@@ -73,8 +73,7 @@ fun UserSuggestionScreen(
     }
 
     fun validateEmail(): Boolean {
-        isEmailError =
-            email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        isEmailError = email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()
         return !isEmailError
     }
 
@@ -97,8 +96,7 @@ fun UserSuggestionScreen(
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
-        },
-        floatingActionButton = {
+        }, floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
                     val isNameValid = validateName()
@@ -120,9 +118,7 @@ fun UserSuggestionScreen(
                     } else {
                         coroutineScope.launch {
                             Toast.makeText(
-                                context,
-                                "Please correct the errors.",
-                                Toast.LENGTH_SHORT
+                                context, "Please correct the errors.", Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
@@ -130,8 +126,7 @@ fun UserSuggestionScreen(
                 icon = { Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Submit") },
                 text = { Text("Submit") }
             )
-        },
-        floatingActionButtonPosition = FabPosition.Companion.Center
+        }, floatingActionButtonPosition = FabPosition.Companion.Center
     ) { innerPadding ->
         Column(
             modifier = Modifier.Companion
@@ -150,13 +145,15 @@ fun UserSuggestionScreen(
 
             OutlinedTextField(
                 value = name,
-                onValueChange = { name = it; if (isNameError) validateName() },
+                onValueChange = {
+                    name = it
+                    if (isNameError) validateName()
+                },
                 modifier = Modifier.Companion.fillMaxWidth(),
                 label = { Text("Your Name") },
                 leadingIcon = {
                     Icon(
-                        Icons.Filled.Person,
-                        contentDescription = "Name Icon"
+                        Icons.Filled.Person, contentDescription = "Name Icon"
                     )
                 },
                 keyboardOptions = KeyboardOptions(
@@ -171,7 +168,10 @@ fun UserSuggestionScreen(
 
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it; if (isEmailError) validateEmail() },
+                onValueChange = {
+                    email = it
+                    if (isEmailError) validateEmail()
+                },
                 modifier = Modifier.Companion.fillMaxWidth(),
                 label = { Text("Your Email") },
                 leadingIcon = {
@@ -191,7 +191,10 @@ fun UserSuggestionScreen(
 
             OutlinedTextField(
                 value = suggestion,
-                onValueChange = { suggestion = it; if (isSuggestionError) validateSuggestion() },
+                onValueChange = {
+                    suggestion = it
+                    if (isSuggestionError) validateSuggestion()
+                },
                 modifier = Modifier.Companion
                     .fillMaxWidth()
                     .defaultMinSize(minHeight = 150.dp),

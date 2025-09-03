@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.hilt.android)
     id("kotlin-kapt")
     id("jacoco")
+    id("io.gitlab.arturbosch.detekt")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -121,6 +123,24 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     })
 }
 
+detekt {
+    toolVersion = "1.23.6"
+    config.setFrom("$rootDir/config/detekt/detekt.yml") // optional custom rules
+    buildUponDefaultConfig = true
+    reports {
+        html.required.set(true)
+        txt.required.set(true)
+        xml.required.set(true)
+    }
+}
+
+ktlint {
+    version.set("1.2.1")
+    android.set(true)
+    outputToConsole.set(true)
+    ignoreFailures.set(false)
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -192,6 +212,8 @@ dependencies {
     testImplementation(libs.coroutines.test)
 
     testImplementation(libs.androidx.core.testing)
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 }
 
 kapt {

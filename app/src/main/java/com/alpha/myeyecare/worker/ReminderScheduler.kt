@@ -17,7 +17,6 @@ import com.alpha.myeyecare.domain.model.ReminderFrequency
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
-
 object ReminderScheduler {
 
     fun scheduleReminder(
@@ -51,17 +50,24 @@ object ReminderScheduler {
             if (before(now)) {
                 when (reminderDetails.frequency) {
                     ReminderFrequency.DAILY, ReminderFrequency.SPECIFIC_DAYS -> {
-                        add(Calendar.DAY_OF_MONTH, 1)
+                        add(
+                            Calendar.DAY_OF_MONTH, 1
+                        )
                     }
 
                     ReminderFrequency.HOURLY -> {
-                        if (get(Calendar.MINUTE) < now.get(Calendar.MINUTE) ||
-                            (get(Calendar.MINUTE) == now.get(Calendar.MINUTE) && get(Calendar.SECOND) < now.get(
+                        if (get(Calendar.MINUTE) < now.get(Calendar.MINUTE) || (get(Calendar.MINUTE) == now.get(
+                                Calendar.MINUTE
+                            ) && get(Calendar.SECOND) < now.get(
                                 Calendar.SECOND
                             ))
                         ) {
-                            add(Calendar.HOUR_OF_DAY, 1)
-                            set(Calendar.MINUTE, 0)
+                            add(
+                                Calendar.HOUR_OF_DAY, 1
+                            )
+                            set(
+                                Calendar.MINUTE, 0
+                            )
                         }
                     }
 
@@ -81,95 +87,72 @@ object ReminderScheduler {
         if (reminderDetails.frequency == ReminderFrequency.SPECIFIC_DAYS && reminderDetails.selectedDays.isNotEmpty()) {
             while (!isDaySelected(scheduledTime, reminderDetails.selectedDays)) {
                 scheduledTime.add(
-                    Calendar.DAY_OF_MONTH,
-                    1
+                    Calendar.DAY_OF_MONTH, 1
                 )
             }
         }
-
 
         val initialDelay = scheduledTime.timeInMillis - now.timeInMillis
         if (initialDelay < 0 && reminderDetails.frequency == ReminderFrequency.ONCE) {
             return
         }
 
-        var workRequest: WorkRequest = OneTimeWorkRequestBuilder<ReminderWorker>()
-            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-            .setInputData(inputData)
-            .addTag(workTag)
-            .build()
+        var workRequest: WorkRequest = OneTimeWorkRequestBuilder<ReminderWorker>().setInitialDelay(
+            initialDelay, TimeUnit.MILLISECONDS
+        ).setInputData(inputData).addTag(workTag).build()
 
         when (reminderDetails.frequency) {
             ReminderFrequency.ONCE -> {
                 if (initialDelay <= 0) {
                     return
                 }
-                workRequest = OneTimeWorkRequestBuilder<ReminderWorker>()
-                    .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-                    .setInputData(inputData)
-                    .addTag(workTag)
-                    .build()
+                workRequest = OneTimeWorkRequestBuilder<ReminderWorker>().setInitialDelay(
+                    initialDelay, TimeUnit.MILLISECONDS
+                ).setInputData(inputData).addTag(workTag).build()
             }
 
             ReminderFrequency.DAILY -> {
                 workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(
                     1, TimeUnit.DAYS
-                )
-                    .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-                    .setInputData(inputData)
-                    .addTag(workTag)
-                    .build()
+                ).setInitialDelay(
+                    initialDelay, TimeUnit.MILLISECONDS
+                ).setInputData(inputData).addTag(workTag).build()
             }
 
             ReminderFrequency.HOURLY -> {
                 workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(
                     1, TimeUnit.HOURS
-                )
-                    .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-                    .setInputData(inputData)
-                    .addTag(workTag)
-                    .build()
+                ).setInitialDelay(initialDelay, TimeUnit.MILLISECONDS).setInputData(inputData)
+                    .addTag(workTag).build()
             }
 
             ReminderFrequency.EVERY_X_MINUTES -> {
                 val interval = reminderDetails.customIntervalMinutes.toLong()
                 workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(
                     interval, TimeUnit.MINUTES
-                )
-                    .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-                    .setInputData(inputData)
-                    .addTag(workTag)
-                    .build()
+                ).setInitialDelay(initialDelay, TimeUnit.MILLISECONDS).setInputData(inputData)
+                    .addTag(workTag).build()
             }
 
             ReminderFrequency.SPECIFIC_DAYS -> {
                 workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(
                     1, TimeUnit.DAYS
-                )
-                    .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-                    .setInputData(
-                        Data.Builder().putAll(inputData.keyValueMap).putString(
-                            "selected_days",
-                            reminderDetails.selectedDays.joinToString(",") { it.name }
-                        ).build()
-                    )
-                    .addTag(workTag)
-                    .build()
+                ).setInitialDelay(initialDelay, TimeUnit.MILLISECONDS).setInputData(
+                    Data.Builder().putAll(inputData.keyValueMap).putString(
+                        "selected_days", reminderDetails.selectedDays.joinToString(",") { it.name })
+                        .build()
+                ).addTag(workTag).build()
             }
         }
 
         if (workRequest is PeriodicWorkRequest) {
             workManager.enqueueUniquePeriodicWork(
-                workTag,
-                ExistingPeriodicWorkPolicy.REPLACE,
-                workRequest
+                workTag, ExistingPeriodicWorkPolicy.REPLACE, workRequest
             )
             onSuccess.invoke()
         } else if (workRequest is OneTimeWorkRequest) {
             workManager.enqueueUniqueWork(
-                workTag,
-                ExistingWorkPolicy.REPLACE,
-                workRequest
+                workTag, ExistingWorkPolicy.REPLACE, workRequest
             )
             onSuccess.invoke()
         }

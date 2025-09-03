@@ -6,9 +6,9 @@ import com.alpha.myeyecare.common.utils.toReminderDetails
 import com.alpha.myeyecare.data.local.dao.ReminderDao
 import com.alpha.myeyecare.domain.model.ReminderDetails
 import com.alpha.myeyecare.domain.repository.ReminderRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
 class ReminderRepositoryImpl @Inject constructor(
     private val reminderDao: ReminderDao
