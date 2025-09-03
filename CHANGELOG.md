@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+ - Added PR template. 
  - Implemented the Github checks and restrict the PR merge. 
  - Added detekt check into github action. 
  - Added detekt check. 
