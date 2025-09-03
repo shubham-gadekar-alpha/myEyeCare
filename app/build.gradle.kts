@@ -213,7 +213,7 @@ dependencies {
 
     testImplementation(libs.androidx.core.testing)
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
+    detektPlugins(libs.detekt.formatting)
 }
 
 kapt {
