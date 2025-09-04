@@ -5,8 +5,11 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
  - Added PR template. 
+ - Implemented the Github checks and restrict the PR merge. 
+ - Added detekt check into github action. 
+ - Added detekt check. 
  - Added Github Actions for test case coverage. 
- - Implemented test case coverage
+ - Implemented test case coverage.
  - Added Exit dialog on Home screen on back press.  
 ### Changed
 ### Fixed

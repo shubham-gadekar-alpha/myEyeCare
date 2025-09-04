@@ -1,0 +1,152 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  # -------------------------------
+  # 1. Build Job
+  # -------------------------------
+  Debug-build-check:
+    name: Debug Build Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle
+
+      - name: Build project (assembleDebug)
+        run: ./gradlew assembleDebug
+
+  # -------------------------------
+  # 2. Detekt Lint Job
+  # -------------------------------
+  Detekt-Check:
+    name: Detekt Check
+    runs-on: ubuntu-latest
+    needs: Debug-build-check
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant Gradle executable permissions
+        run: chmod +x gradlew
+
+      - name: Run Detekt
+        run: ./gradlew detekt
+
+      - name: Upload Detekt HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: detekt-report
+          path: app/build/reports/detekt/detekt.html
+
+      - name: Comment Detekt issues on PR
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: app/build/reports/detekt/detekt.xml
+          header: "### Detekt Lint Report"
+          recreate: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Post success message if no Detekt issues
+        if: github.event_name == 'pull_request' && !failure()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: "### Detekt Lint Report"
+          message: "No Detekt issues found. 🎉"
+          recreate: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # -------------------------------
+  # 3. Unit Test + Coverage Job
+  # -------------------------------
+  Unit-Tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: Detekt-Check
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle
+
+      - name: Run unit tests with JaCoCo
+        run: ./gradlew clean testDebugUnitTest jacocoTestReport
+
+      - name: Upload JaCoCo HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: app/build/reports/jacoco/jacocoTestReport/
+
+      - name: Add coverage to PR (comment + checks)
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.7.2
+        with:
+          paths: app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+          update-comment: true
+          title: Coverage Report
+
+      - name: Fail PR if coverage too low
+        if: ${{ steps.jacoco.outputs.coverage-overall != '' && steps.jacoco.outputs.coverage-overall < 80 }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const coverage = parseFloat("${{ steps.jacoco.outputs.coverage-overall }}");
+            if (!isNaN(coverage) && coverage < 80) {
+              core.setFailed(`Overall coverage is below threshold: ${coverage}%`);
+            }

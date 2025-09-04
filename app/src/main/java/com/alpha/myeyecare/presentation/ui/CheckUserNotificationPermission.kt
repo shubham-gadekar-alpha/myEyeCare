@@ -25,7 +25,6 @@ fun CheckUserNotificationPermission(
     permissionGranted: () -> Unit,
     onActionClick: () -> Unit
 ) {
-
     val context = LocalContext.current
     var showPermissionRationaleDialog by remember { mutableStateOf(false) }
     var showSettingsRedirectDialog by remember { mutableStateOf(false) }
@@ -47,24 +46,19 @@ fun CheckUserNotificationPermission(
                     // For a fresh launch, this is where we'd typically ask.
                     // If it was "Don't ask again", this won't show a dialog but will update the status.
 
-                    if (fromReminderDetailsScreen)
+                    if (fromReminderDetailsScreen) {
                         showSettingsRedirectDialog = true
-                    else {
+                    } else {
                         notificationPermissionState.launchPermissionRequest()
                         permissionAlreadyRequested = true // Mark that we've initiated a request
                     }
-                } else if (!notificationPermissionState.status.isGranted &&
-                    notificationPermissionState.status.shouldShowRationale
-                ) {
+                } else if (!notificationPermissionState.status.isGranted && notificationPermissionState.status.shouldShowRationale) {
                     // If rationale should be shown (user denied once without "Don't ask again")
                     // This typically means you should show your custom UI explaining why you need it
                     // and then trigger launchPermissionRequest() from a button in that UI.
                     // For this example, we'll trigger a dialog if rationale is needed.
                     showPermissionRationaleDialog = true
-                } else if (!notificationPermissionState.status.isGranted &&
-                    !notificationPermissionState.status.shouldShowRationale &&
-                    permissionAlreadyRequested
-                ) {
+                } else if (!notificationPermissionState.status.isGranted && !notificationPermissionState.status.shouldShowRationale && permissionAlreadyRequested) {
                     // User denied with "Don't ask again" or system doesn't allow requesting again.
                     // Guide them to settings.
                     showSettingsRedirectDialog = true
@@ -79,8 +73,14 @@ fun CheckUserNotificationPermission(
                         onActionClick.invoke()
                         showPermissionRationaleDialog = false
                     },
-                    title = { Text("Notification Permission") },
-                    text = { Text("To keep you updated with your alerts, our app needs permission to send you notifications.") },
+                    title = {
+                        Text("Notification Permission")
+                    },
+                    text = {
+                        Text(
+                            "To keep you updated with your alerts, our app needs permission to send you notifications."
+                        )
+                    },
                     confirmButton = {
                         Button(onClick = {
                             onActionClick.invoke()
@@ -110,8 +110,12 @@ fun CheckUserNotificationPermission(
                         onActionClick.invoke()
                         showSettingsRedirectDialog = false
                     },
-                    title = { Text("Notification Permission Required") },
-                    text = { Text("Notifications are currently disabled. Please enable them in app settings to receive respective notifications.") },
+                    title = {
+                        Text("Notification Permission Required")
+                    },
+                    text = {
+                        Text("Notifications are currently disabled. Please enable them in app settings to receive respective notifications.")
+                    },
                     confirmButton = {
                         Button(onClick = {
                             onActionClick.invoke()
@@ -127,11 +131,13 @@ fun CheckUserNotificationPermission(
                         }
                     },
                     dismissButton = {
-                        Button(onClick = {
-                            onActionClick.invoke()
+                        Button(
+                            onClick = {
+                                onActionClick.invoke()
 
-                            showSettingsRedirectDialog = false
-                        }) {
+                                showSettingsRedirectDialog = false
+                            }
+                        ) {
                             Text("Cancel")
                         }
                     }

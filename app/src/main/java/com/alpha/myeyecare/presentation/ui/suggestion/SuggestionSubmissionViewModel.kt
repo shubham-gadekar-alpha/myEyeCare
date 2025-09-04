@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.alpha.myeyecare.domain.model.Suggestion
 import com.alpha.myeyecare.domain.useCases.SaveSuggestionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SuggestionSubmissionViewModel @Inject constructor(

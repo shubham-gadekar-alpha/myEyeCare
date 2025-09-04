@@ -10,5 +10,4 @@ interface ReminderRepository {
     fun isReminderEnable(reminder: ReminderDetails): Flow<Boolean>
 
     suspend fun insertReminderIntoLocal(reminder: ReminderDetails)
-
 }

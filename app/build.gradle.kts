@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.hilt.android)
     id("kotlin-kapt")
     id("jacoco")
+    id("io.gitlab.arturbosch.detekt")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -90,8 +92,8 @@ tasks.register<JacocoReport>("jacocoTestReport") {
             "**/com/alpha/myeyecare/presentation/ui/splash/SplashScreen*.*",
             "**/presentation/ui/splash/ComposableSingletons\$SplashScreen*.*",
 
-            "**/com/alpha/myeyecare/presentation/ui/UserPermission*.*",
-            "**/presentation/ui/ComposableSingletons\$UserPermission*.*",
+            "**/com/alpha/myeyecare/presentation/ui/CheckUserNotificationPermission*.*",
+            "**/presentation/ui/ComposableSingletons\$CheckUserNotificationPermission*.*",
 
             "**/com/alpha/myeyecare/presentation/ui/home/HomeScreen*.*",
             "**/presentation/ui/home/ComposableSingletons\$HomeScreen*.*",
@@ -119,6 +121,24 @@ tasks.register<JacocoReport>("jacocoTestReport") {
             "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
         )
     })
+}
+
+detekt {
+    toolVersion = "1.23.6"
+    config.setFrom("$rootDir/config/detekt/detekt.yml") // optional custom rules
+    buildUponDefaultConfig = true
+    reports {
+        html.required.set(true)
+        txt.required.set(true)
+        xml.required.set(true)
+    }
+}
+
+ktlint {
+    version.set("1.2.1")
+    android.set(true)
+    outputToConsole.set(true)
+    ignoreFailures.set(false)
 }
 
 dependencies {
@@ -192,6 +212,8 @@ dependencies {
     testImplementation(libs.coroutines.test)
 
     testImplementation(libs.androidx.core.testing)
+
+    detektPlugins(libs.detekt.formatting)
 }
 
 kapt {

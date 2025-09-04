@@ -17,5 +17,4 @@ interface ReminderDao {
 
     @Query("SELECT isEnabled FROM reminder WHERE id = :id")
     suspend fun isReminderEnable(id: String): Boolean
-
 }

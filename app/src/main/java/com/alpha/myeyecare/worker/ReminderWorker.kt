@@ -66,7 +66,6 @@ class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_menu_view)
             .setContentTitle(title)

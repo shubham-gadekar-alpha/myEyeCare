@@ -17,7 +17,6 @@ import com.alpha.myeyecare.presentation.ui.home.HomeScreen
 import com.alpha.myeyecare.presentation.ui.splash.SplashScreen
 import com.alpha.myeyecare.presentation.ui.suggestion.UserSuggestionScreen
 
-
 @Composable
 fun NavGraph() {
     val navController: NavHostController = rememberNavController()
@@ -25,10 +24,8 @@ fun NavGraph() {
     var shouldShowPermissionDialog by remember { mutableStateOf(true) }
 
     NavHost(
-        navController = navController,
-        startDestination = AppDestinations.SPLASH_SCREEN
+        navController = navController, startDestination = AppDestinations.SPLASH_SCREEN
     ) {
-
         composable(AppDestinations.HOME_SCREEN) {
             HomeScreen(
                 navController = navController,
@@ -58,11 +55,9 @@ fun NavGraph() {
             AppDestinations.EYE_CARE_REMINDER_SCREEN
         ) {
             SetupReminderScreen(
-                reminderType = EYE_REMINDER,
-                onSaveReminder = {
+                reminderType = EYE_REMINDER, onSaveReminder = {
                     navController.popBackStack()
-                },
-                onBackIconPressed = {
+                }, onBackIconPressed = {
                     navController.popBackStack()
                 }
             )
@@ -70,11 +65,9 @@ fun NavGraph() {
 
         composable(AppDestinations.WATER_REMINDER_SCREEN) {
             SetupReminderScreen(
-                reminderType = DRINKING_REMINDER,
-                onSaveReminder = {
+                reminderType = DRINKING_REMINDER, onSaveReminder = {
                     navController.popBackStack()
-                },
-                onBackIconPressed = {
+                }, onBackIconPressed = {
                     navController.popBackStack()
                 }
             )
