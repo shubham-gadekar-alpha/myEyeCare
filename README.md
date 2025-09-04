@@ -37,6 +37,7 @@ This repository is mainly created for **learning purposes** and is **open to con
 - **Async & Reactive**: Coroutines & Flow
 - **Background Tasks**: WorkManager
 - **Static Analysis**: Detekt (Code quality & lint checks)
+- **Unit Testing**: JUnit + JaCoCo (Code coverage reports)
 - **CI/CD**: GitHub Actions (Automated build, unit tests, and linting pipeline)
 
 ---
