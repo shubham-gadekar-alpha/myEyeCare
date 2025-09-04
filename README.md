@@ -1,8 +1,10 @@
 # 👁️💧 Eye & Water Reminder App
 
 [![Play Store](https://img.shields.io/badge/Download-PlayStore-green?logo=googleplay)](https://play.google.com/store/apps/details?id=com.alpha.myeyecare)  
+[![CI](https://github.com/shubham-gadekar-alpha/myEyeCare/actions/workflows/CI-Checks.yml/badge.svg)](https://github.com/shubham-gadekar-alpha/myEyeCare/actions/workflows/CI-Checks.yml)
+
 _A simple yet powerful reminder app to take care of your **eye health** and **hydration needs**._
-(**This app in under review and available for testing only, if you wish to test this app please share me your email so that I can share a link with you and share app with you**)
+(**Currently under review & available for testing only. If you wish to test this app, please share your email so I can send you an invite link.**)
 
 ---
 
@@ -32,14 +34,25 @@ This repository is mainly created for **learning purposes** and is **open to con
 - **UI Toolkit**: Jetpack Compose
 - **Local Storage**: Room Database
 - **Dependency Injection**: Hilt
-- **Coroutines & Flow**: For async & reactive programming
-- **Other**: Material 3, WorkManager (for background tasks)
+- **Async & Reactive**: Coroutines & Flow
+- **Background Tasks**: WorkManager
+- **Static Analysis**: Detekt (Code quality & lint checks)
+- **CI/CD**: GitHub Actions (Automated build, unit tests, and linting pipeline)
 
 ---
 
-## 📂 Repository Structure
+## ⚙️ CI/CD Pipeline
+This project integrates **GitHub Actions** to ensure high code quality and reliability.  
+The pipeline includes:
+- 🔍 **Detekt Analysis** → Automated Kotlin static code analysis for clean, maintainable code.
+- 🏗 **Build Verification** → Ensures that every commit/PR successfully compiles the Android project.
+- ✅ **Unit Test Execution** → Runs unit tests with coverage checks to validate correctness.
 
-```plaintext
+These checks are triggered automatically on every **pull request** to maintain project quality.
+
+--- 
+
+```
 
 com.alpha.myeyecare/ 
 │ 
@@ -135,11 +148,13 @@ If you’d like to add new features, improve UI/UX, or optimize performance:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request 🎉
 
+Every PR will go through automated **build, lint, and test checks** before merging.
+
 ---
 
 ## 👨‍💻 Developers
-- [Shubham Gadekar] (Developer)
-- [Nitin Tyagi] (Developer)
+- **Shubham Gadekar** (Developer)
+- **Nitin Tyagi** (Developer)
 - Open to all contributors! Add yourself here via PR.
 
 ---
@@ -151,6 +166,8 @@ This project is **for learning purposes**. Developers can explore:
 - **Dependency Injection with Hilt**
 - **Room database**
 - **WorkManager background scheduling**
+- **Static analysis & linting with Detekt**
+- **CI/CD automation with GitHub Actions**
 
 ---
 

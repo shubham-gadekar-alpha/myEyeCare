@@ -3,8 +3,8 @@ name: CI
 on:
   pull_request:
     branches: [ main ]
-    #  push:
-    #    branches: [ main ]
+  push:
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -46,7 +46,7 @@ jobs:
   Detekt-Check:
     name: Detekt Check
     runs-on: ubuntu-latest
-    needs: Debug-build-check   # ✅ ensures build succeeds first
+    needs: Debug-build-check
     permissions:
       contents: read
       pull-requests: write
@@ -97,7 +97,7 @@ jobs:
   Unit-Tests:
     name: Unit Tests
     runs-on: ubuntu-latest
-    needs: Detekt-Check   # ✅ ensures build succeeds first
+    needs: Detekt-Check
     permissions:
       contents: read
       pull-requests: write
